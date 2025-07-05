@@ -1,0 +1,40 @@
+write a python script that involves the creation of novel and very difficult math questions.
+for this setup we have three LLMs:
+--> creator LLM, talker LLM, solver LLM
+use langchain and make sure both of these models can be either google gen or openai models
+here are their tasks:
+creator LLM: is guided by the talker LLM to generate the question, improve upon it and generate verifier codes.
+talker LLM: guides creator LLM, decides when to go to next stage
+
+both creator and talker are in a chat continued by iterations.
+the solver LLM acts as a 3rd party verifier of a questions difficulty.
+
+here is how the creation process goes:
+
+------- FIRST CHAT (talker LLM & creator LLM)
+talker LLM starts with: 
+generate me one very hard question about {topic name} that is not a proof question. it should be in AIME level.
+creator LLM generates a question.
+then talker LLM says: Now, using this write a text version of this mathematical representation of the problem that abstracts the mathematic given. Don't give any hints, and try to hide the main observation of this question as much as possible. The question should be written like a textbook problem. Make sure the problem is not a proof problem. Output only one problem. Give the concise solution below the problem. Finally give your output in such that the question is in ```question tags and the solution is in ```solution tags.
+creator LLM generates the refined question and the solution.
+we then use string regex to extract question and solution.
+------ THE FIRST CHAT ENDS
+afterwards we ask the question to solver LLM. if the solver LLM solves the question, we go to iteration chat formats. we verify if the solver LLM solved the question using the talker LLM.
+
+----- ITERATION CHAT (talker LLM & creator LLM)
+we give both the question and the solution at start of the chat and the talker LLM says: given this question, give me some ideas (blueprints) to add onto this question to make it harder. the ideas should make this question very novel.
+creator LLM generates blueprints.
+then talker LLM says: ok, which one of these ideas is the most novel and would make the question the hardest?
+creator LLM gives some options.
+the talker LLM selects the number given by creator LLM and says: OK, please write a new question based on blueprint 1 combining it with the previous question. you are allowed to change the numbers and given constraints, keeping and merging the characteristics of the previous question and the new idea. also give me the solution. make sure the question has a well defined answer. if no answer comes up after exhausting all possibilities, you can slightly tweak the constraints to achieve a well defined answer. Finally, make sure the numbers are relatively big to prevent brute-forcing
+creator LLM gives a question and soln.
+then talker LLM says: Now, using this write a text version of this mathematical representation of the problem that abstracts the mathematic given. Don't give any hints, and try to hide the main observation of this question as much as possible. The question should be written like a textbook problem. Make sure the problem is not a proof problem. Output only one problem. Give the concise solution below the problem. Finally give your output in such that the question is in ```question tags and the solution is in ```solution tags.
+creator LLM generates the refined question and the solution.
+we then use string regex to extract question and solution.
+afterwards, the talker LLM asks: write a python program that numerically showcases your solution is correct and is the largest value out of other possible candidates. (this prompt should be generated specifically for the question by the talker LLM.)
+afterwards we run the code and output the python scripts output to the creator LLM. the talker LLM checks the output and if its not right, the creator LLM is prompted again with a slight nudge to perhaps fix the question.
+this can go on for like 3 iterations before we give up and start over.
+----- 	ITERATION CHAT ENDS
+afterwards we ask the question to solver LLM. if the solver LLM solves the question, we go to the next iteration by iterating on the question to make it harder. we verify if the solver LLM solved the question using the talker LLM.
+
+by the way, the talker LLM should only have one prompt where it acts intelligently on the question generation process to stamp out errors that can be made by the creator LLM. what i gave here are the steps that they must follow but the prompts can vary depending on situation and question. the talker LLMs mission is to make the question correct and verified, while avoiding very basic cases of wrongness and easiness such as bruteforces. basically this is a chat to generate a question and you should code it like so.
