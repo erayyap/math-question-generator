@@ -76,8 +76,8 @@ To get a feel for what this prototype can do, please explore the included exampl
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/your-repo-name.git
-    cd your-repo-name
+    git clone https://github.com/erayyap/math-question-generator.git
+    cd math-question-generator
     ```
 
 2.  **Create a virtual environment and install dependencies:**
