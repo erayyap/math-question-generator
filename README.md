@@ -1,9 +1,3 @@
-Excellent additions. Acknowledging the prototype nature of a project and providing concrete examples are crucial for a good README.
-
-Here is the updated `README.md`, incorporating these changes.
-
----
-
 # Agentic Math Question Generator
 
 This repository contains a Python script that leverages a multi-agent system of Large Language Models (LLMs) to autonomously generate novel, difficult, and verified math problems.
