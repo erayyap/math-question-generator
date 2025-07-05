@@ -41,16 +41,16 @@ graph TD
     B --> C[Creator: Responds with Question/Solution/Ideas];
     C --> D{System: External Checks};
     D -- Code Found --> E[Execute Python Code & Capture Output];
-    E --> F[Inject '[SYSTEM FEEDBACK]' into History];
+    E --> F["Inject '[SYSTEM FEEDBACK]' into History"];
     D -- No Code --> F;
     F --> G{Talker: Analyze History & Feedback};
     G --> H{Talker decides: 'FINALIZE' command?};
     H -- No --> B;
     H -- Yes --> I{Final Integrity Check};
-    I -- Fails --> J[Inject '[SYSTEM FEEDBACK]' with failure reason];
+    I -- Fails --> J["Inject '[SYSTEM FEEDBACK]' with failure reason"];
     J --> B;
     I -- Passes --> K{Final Difficulty Check with Solver LLM};
-    K -- Solver Succeeds --> L[Inject '[SYSTEM FEEDBACK]' with 'Not Hard Enough'];
+    K -- Solver Succeeds --> L["Inject '[SYSTEM FEEDBACK]' with 'Not Hard Enough'"];
     L --> B;
     K -- Solver Fails --> M([🏆 Success! Question is Verified & Difficult]);
 ```
